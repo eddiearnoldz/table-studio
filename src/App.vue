@@ -58,14 +58,18 @@ onBeforeUnmount(() => {
     </ul>
   </header>
 
-  <div v-if="showAbout" class="displayInfo about-section">
-    <p>Tables studio is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
-  </div>
+  <transition name="fade">
+    <div v-if="showAbout" class="displayInfo about-section">
+      <p>Tables studio is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
+    </div>
+  </transition>
 
-  <div v-if="showContact" class="displayInfo contact-section">
-    <a href="mailto:info@tables.studio">info@tables.studio</a>
-    <a href="https://instagram.com" target="_blank">@tables-studio</a>
-  </div>
+  <transition name="fade">
+    <div v-if="showContact" class="displayInfo contact-section">
+      <a href="mailto:info@tables.studio">info@tables.studio</a>
+      <a href="https://instagram.com" target="_blank">@tables-studio</a>
+    </div>
+  </transition>
 
   <main>
     <h1>Tables Studio</h1>
@@ -222,7 +226,7 @@ main h1 {
   line-height: 0.3;
   z-index: 3;
   font-family: 'Koulen';
-  letter-spacing: 0.3vw;
+  letter-spacing: 0.5vw;
 }
 
 .logo,
@@ -233,6 +237,13 @@ main h1 {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 
 @media (min-width: 768px) {
