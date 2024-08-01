@@ -1,6 +1,11 @@
+:root {
+--text-color: #fdfaf6;
+}
+
 html,
 body {
   background-color: black;
+
 }
 
 body {
@@ -20,4 +25,10 @@ body {
   font-family: 'Koulen';
   src: url('/assets/fonts/Koulen-Regular.ttf');
   src: url('/assets/fonts/Koulen-Regular.woff');
+}
+
+@media screen and (min-width: 768px) {
+  html {
+    cursor: none;
+  }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 
 const images = ref([
   '/assets/images/chef.webp',
@@ -12,6 +12,10 @@ const duplicatedImages = ref([...images.value, ...images.value]);
 
 const showAbout = ref(false);
 const showContact = ref(false);
+
+const cursorX = ref(0);
+const cursorY = ref(0);
+const showCursor = ref(window.innerWidth > 768);
 
 const hideSections = () => {
   showAbout.value = false;
@@ -40,18 +44,36 @@ const handleClickOutside = (event) => {
   }
 };
 
+const handleMouseMove = (event) => {
+  cursorX.value = event.clientX;
+  cursorY.value = event.clientY;
+};
+
+const handleResize = () => {
+  showCursor.value = window.innerWidth > 768;
+  if (showCursor.value) {
+    document.addEventListener('mousemove', handleMouseMove);
+  } else {
+    document.removeEventListener('mousemove', handleMouseMove);
+  }
+};
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  window.addEventListener('resize', handleResize);
+  handleResize(); // Check initial width
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('resize', handleResize);
+  document.removeEventListener('mousemove', handleMouseMove);
 });
 </script>
 
 <template>
   <header>
-    <h2 class="logo">Tables Studio</h2>
+    <h2 class="logo">Tables Studio.</h2>
     <ul class="nav">
       <li @click="toggleAbout">About</li>
       <li @click="toggleContact">Contact</li>
@@ -71,30 +93,31 @@ onBeforeUnmount(() => {
     </div>
   </transition>
 
-  <main>
-    <h1>Tables Studio</h1>
-    <div id="container">
-      <div class="scroll">
-        <div class="m-scroll">
-          <div v-for="(img, index) in duplicatedImages" :key="'img-' + index" class="carousel-item">
-            <img :src="img" alt="carousel image" />
+  <transition name="fade">
+    <main>
+      <h1>Tables Studio.</h1>
+      <div id="container">
+        <div class="scroll">
+          <div class="m-scroll">
+            <div v-for="(img, index) in duplicatedImages" :key="'img-' + index" class="carousel-item">
+              <img :src="img" alt="carousel image" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </transition>
+  <div v-if="showCursor" class="cursor" :style="{ left: `${cursorX}px`, top: `${cursorY}px` }"></div>
 </template>
 
+
 <style scoped>
-body {
-  margin: 0;
-}
 
 header {
   position: absolute;
   top: 0;
   z-index: 1;
-  color: white;
+  color: var(--text-color);
   padding: 1rem;
   display: flex;
   justify-content: space-between;
@@ -109,7 +132,6 @@ header {
 }
 
 .logo {
-  cursor: pointer;
   transition: transform 0.3s;
   font-family: 'Koulen';
   letter-spacing: 0.1rem;
@@ -119,7 +141,6 @@ header {
 }
 
 .nav li {
-  cursor: pointer;
   text-decoration: none;
   transition: transform 0.3s;
   font-family: 'Koulen';
@@ -128,9 +149,10 @@ header {
 }
 
 .nav li:hover,
-.logo:hover  {
-transform: scale(1.1);
-transition: transform 0.3s;
+.logo:hover,
+.displayInfo a:hover  {
+  transform: scale(1.1);
+  transition: transform 0.3s;
 }
 
 .displayInfo {
@@ -143,7 +165,7 @@ transition: transform 0.3s;
   padding: 1rem;
   font-size: 2rem;
   z-index: 3;
-  color: white;
+  color: var(--text-color);
   opacity: 1;
   mix-blend-mode: difference;
   text-align: center;
@@ -154,9 +176,11 @@ transition: transform 0.3s;
 
 .displayInfo a {
   text-decoration: none;
-  color: white;
+  color: var(--text-color);
   opacity: 1;
   mix-blend-mode: exclusion;
+  cursor: none;
+  transition: transform 0.3s;
 }
 
 main {
@@ -195,6 +219,11 @@ main {
   width: fit-content;
 }
 
+.cursor {
+  display: none;
+  pointer-events: none;
+}
+
 @keyframes scrollText {
   from {
     transform: translateX(0%);
@@ -219,7 +248,7 @@ main {
 main h1 {
   position: absolute;
   bottom: 0;
-  color: white;
+  color: var(--text-color);
   opacity: 1;
   mix-blend-mode: difference;
   font-size: clamp(2rem, 17vw, 20rem);
@@ -247,11 +276,11 @@ main h1 {
 }
 
 @media (min-width: 768px) {
-
   header {
     width: calc(100% - 4rem);
     padding: 1rem 2rem;
   }
+
   .carousel-item {
     width: 33vw;
   }
@@ -264,6 +293,20 @@ main h1 {
   .logo {
     font-size: 3rem;
     letter-spacing: 0.2rem;
+  }
+
+  .cursor {
+    display: block;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    background-color: white;
+    border-radius: 50%;
+    mix-blend-mode: exclusion;
+    opacity: 1;
+    pointer-events: none;
+    transition: transform 0.1s;
+    z-index: 5;
   }
 }
 </style>
