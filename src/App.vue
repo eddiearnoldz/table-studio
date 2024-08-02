@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import gsap from 'gsap'
 
 const images = ref([
   '/assets/images/chef.webp',
@@ -12,6 +13,7 @@ const duplicatedImages = ref([...images.value, ...images.value]);
 
 const showAbout = ref(false);
 const showContact = ref(false);
+const showContent = ref(false);
 
 const cursorX = ref(0);
 const cursorY = ref(0);
@@ -20,6 +22,10 @@ const showCursor = ref(window.innerWidth > 768);
 const hideSections = () => {
   showAbout.value = false;
   showContact.value = false;
+};
+
+const splitTitle = (title) => {
+  return title.split('').map((letter) => `<span class="name-animation">${letter}</span>`).join('');
 };
 
 const toggleAbout = () => {
@@ -58,10 +64,29 @@ const handleResize = () => {
   }
 };
 
+const animateTitle = () => {
+  const letters = document.querySelectorAll('.name-animation');
+  gsap.fromTo(
+    letters,
+    { opacity: 0},
+    {  opacity: 1, stagger: {each: 0.2, from:"start"}, duration: 1, delay: 1,}
+  );
+};
+
+const fadeInContent = () => {
+  gsap.to('.content', { opacity: 1, duration: 1 });
+};
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
   window.addEventListener('resize', handleResize);
   handleResize(); // Check initial width
+
+  nextTick(() => {
+    animateTitle();
+    showContent.value = true;
+    fadeInContent();
+  });
 });
 
 onBeforeUnmount(() => {
@@ -72,6 +97,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+    <div v-show="showContent" class="content">
   <header>
     <h2 class="logo">Tables Studio.</h2>
     <ul class="nav">
@@ -93,9 +119,8 @@ onBeforeUnmount(() => {
     </div>
   </transition>
 
-  <transition name="fade">
     <main>
-      <h1>Tables Studio.</h1>
+      <h1 v-html="splitTitle('Tables Studio.')"></h1>
       <div id="container">
         <div class="scroll">
           <div class="m-scroll">
@@ -106,12 +131,17 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </main>
-  </transition>
-  <div v-if="showCursor" class="cursor" :style="{ left: `${cursorX}px`, top: `${cursorY}px` }"></div>
+    <div v-if="showCursor" class="cursor" :style="{ left: `${cursorX}px`, top: `${cursorY}px` }"></div>
+  </div>
 </template>
 
 
 <style scoped>
+
+.content {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
 
 header {
   position: absolute;
@@ -251,7 +281,7 @@ main h1 {
   color: var(--text-color);
   opacity: 1;
   mix-blend-mode: difference;
-  font-size: clamp(2rem, 17vw, 20rem);
+  font-size: clamp(2rem, 16vw, 21rem);
   line-height: 0.3;
   z-index: 3;
   font-family: 'Koulen';
@@ -268,10 +298,16 @@ main h1 {
   user-select: none;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active{
+  transition: opacity 1s;
+}
+
+.fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter-from, .fade-leave-to {
+
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
