@@ -115,7 +115,7 @@ onBeforeUnmount(() => {
   <transition name="fade">
     <div v-if="showContact" class="displayInfo contact-section">
       <a href="mailto:info@tables.studio">info@tables.studio</a>
-      <a href="https://instagram.com" target="_blank">@tables-studio</a>
+      <a href="https://instagram.com" target="_blank">@tables-london</a>
     </div>
   </transition>
 
@@ -141,6 +141,7 @@ onBeforeUnmount(() => {
 .content {
   opacity: 0;
   transition: opacity 1s ease;
+  height: 100%;
 }
 
 header {
@@ -166,7 +167,7 @@ header {
   font-family: 'Koulen';
   letter-spacing: 0.1rem;
   line-height: 100%;
-  font-size: 2rem;
+  font-size: 3rem;
   margin: 0;
 }
 
@@ -187,7 +188,7 @@ header {
 
 .displayInfo {
   position: absolute;
-  top: 10vh;
+  top: 10%;
   left: 0;
   right: 0;
   max-width: 800px;
@@ -206,7 +207,7 @@ header {
 
 .displayInfo.contact-section {
   top: unset;
-  bottom: 15vh;
+  bottom: 15%
 
 }
 
@@ -226,7 +227,7 @@ main {
 
 #container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   position: relative;
   overflow: hidden;
   z-index: 0;
@@ -240,7 +241,7 @@ main {
   z-index: 1;
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 100%;
 }
 
 .m-scroll {
@@ -334,7 +335,7 @@ main h1 {
   }
 
   .logo {
-    font-size: 3rem;
+    font-size: 4rem;
     letter-spacing: 0.2rem;
   }
 
