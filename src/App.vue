@@ -15,7 +15,6 @@ const duplicatedImages = ref([...images.value, ...images.value]);
 
 const showAbout = ref(false);
 const showContact = ref(false);
-const showContent = ref(false);
 const imagesLoaded = ref(false);
 const cursorX = ref(0);
 const cursorY = ref(0);
@@ -106,7 +105,6 @@ const preloadImages = (imageArray) => {
       loadedCount++;
       if (loadedCount === totalImages) {
         imagesLoaded.value = true;
-        showContent.value = true;
         fadeInContent();
       }
     };
@@ -136,7 +134,7 @@ onBeforeUnmount(() => {
   <div v-if="!imagesLoaded" class="loading-screen">
     <h1 v-html="splitTitle('Tables.')"></h1>
   </div>
-  <div v-show="showContent" class="content">
+  <div v-show="imagesLoaded" class="content">
     <header>
       <transition name="fade">
         <img v-show="showAbout || showContact" :src="TablesLogo" alt="Tables Logo" class="header-logo"/>
