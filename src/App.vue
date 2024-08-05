@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
 <template>
     <div v-show="showContent" class="content">
   <header>
-    <h2 class="logo">Tables Studio.</h2>
+    <h2 class="logo">Tables.</h2>
     <ul class="nav">
       <li @click="toggleAbout">About</li>
       <li @click="toggleContact">Contact</li>
@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
 
   <transition name="fade">
     <div v-if="showAbout" class="displayInfo about-section">
-      <p>Tables studio is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
+      <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
     </div>
   </transition>
 
@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
   </transition>
 
     <main>
-      <h1 v-html="splitTitle('Tables Studio.')"></h1>
+      <h1 v-html="splitTitle('Tables.')"></h1>
       <div id="container">
         <div class="scroll">
           <div class="m-scroll">
