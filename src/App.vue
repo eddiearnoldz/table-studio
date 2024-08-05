@@ -30,28 +30,16 @@ const splitTitle = (title) => {
 };
 
 const toggleAbout = () => {
-  if (showAbout.value) {
-    showAbout.value = false;
-    setTimeout(() => {
-    }, 300);
-  } else {
-    setTimeout(() => {
-      showAbout.value = true;
-      showContact.value = false;
-    }, 300);
+  if (!showAbout.value) {
+    showAbout.value = true;
+    showContact.value = false;
   }
 };
 
 const toggleContact = () => {
-  if (showContact.value) {
-    showContact.value = false;
-    setTimeout(() => {
-    }, 300);
-  } else {
-    setTimeout(() => {
-      showContact.value = true;
-      showAbout.value = false;
-    }, 300);
+  if (!showContact.value) {
+    showContact.value = true;
+    showAbout.value = false;
   }
 };
 
@@ -137,7 +125,7 @@ onBeforeUnmount(() => {
   <div v-show="imagesLoaded" class="content">
     <header>
       <transition name="fade">
-        <img v-show="showAbout || showContact" :src="TablesLogo" alt="Tables Logo" class="header-logo"/>
+        <img v-show="showAbout || showContact" :src="TablesLogo" alt="Tables Logo" @click="hideSections" class="header-logo"/>
       </transition>
       <ul class="nav">
         <li @click="toggleAbout">About</li>
