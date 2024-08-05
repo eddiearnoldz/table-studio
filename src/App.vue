@@ -187,7 +187,7 @@ header {
 
 .displayInfo {
   position: absolute;
-  top: 100px;
+  top: 10vh;
   left: 0;
   right: 0;
   max-width: 800px;
@@ -202,6 +202,12 @@ header {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.displayInfo.contact-section {
+  top: unset;
+  bottom: 15vh;
+
 }
 
 .displayInfo a {
@@ -277,12 +283,13 @@ main {
 
 main h1 {
   position: absolute;
-  bottom: 0;
+  top: calc(50% - 8vw);
   color: var(--text-color);
   opacity: 1;
   mix-blend-mode: difference;
-  font-size: clamp(2rem, 16vw, 21rem);
-  line-height: 0.3;
+  font-size: clamp(2rem, 25vw, 21rem);
+  line-height: 1;
+  margin: 0;
   z-index: 3;
   font-family: 'Koulen';
   letter-spacing: 0.5vw;
