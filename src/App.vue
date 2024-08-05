@@ -14,7 +14,7 @@ const duplicatedImages = ref([...images.value, ...images.value]);
 const showAbout = ref(false);
 const showContact = ref(false);
 const showContent = ref(false);
-
+const imagesLoaded = ref(false);
 const cursorX = ref(0);
 const cursorY = ref(0);
 const showCursor = ref(window.innerWidth > 768);
@@ -77,6 +77,24 @@ const fadeInContent = () => {
   gsap.to('.content', { opacity: 1, duration: 1 });
 };
 
+const preloadImages = (imageArray) => {
+  let loadedCount = 0;
+  const totalImages = imageArray.length;
+
+  imageArray.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      loadedCount++;
+      if (loadedCount === totalImages) {
+        imagesLoaded.value = true;
+        showContent.value = true;
+        fadeInContent();
+      }
+    };
+  });
+};
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
   window.addEventListener('resize', handleResize);
@@ -84,8 +102,7 @@ onMounted(() => {
 
   nextTick(() => {
     animateTitle();
-    showContent.value = true;
-    fadeInContent();
+    preloadImages(duplicatedImages.value);
   });
 });
 
@@ -97,27 +114,30 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div v-show="showContent" class="content">
-  <header>
-    <h2 class="logo">Tables.</h2>
-    <ul class="nav">
-      <li @click="toggleAbout">About</li>
-      <li @click="toggleContact">Contact</li>
-    </ul>
-  </header>
+  <div v-if="!imagesLoaded" class="loading-screen">
+    <h1 v-html="splitTitle('Tables.')"></h1>
+  </div>
+  <div v-show="showContent" class="content">
+    <header>
+      <h2 class="logo">Tables.</h2>
+      <ul class="nav">
+        <li @click="toggleAbout">About</li>
+        <li @click="toggleContact">Contact</li>
+      </ul>
+    </header>
 
-  <transition name="fade">
-    <div v-if="showAbout" class="displayInfo about-section">
-      <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
-    </div>
-  </transition>
+    <transition name="fade">
+      <div v-if="showAbout" class="displayInfo about-section">
+        <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
+      </div>
+    </transition>
 
-  <transition name="fade">
-    <div v-if="showContact" class="displayInfo contact-section">
-      <a href="mailto:info@tables.studio">info@tables.studio</a>
-      <a href="https://instagram.com" target="_blank">@tables-london</a>
-    </div>
-  </transition>
+    <transition name="fade">
+      <div v-if="showContact" class="displayInfo contact-section">
+        <a href="mailto:info@tables.studio">info@tables.studio</a>
+        <a href="https://instagram.com" target="_blank">@tables-london</a>
+      </div>
+    </transition>
 
     <main>
       <h1 v-html="splitTitle('Tables.')"></h1>
@@ -135,8 +155,21 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-
 <style scoped>
+.loading-screen {
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-screen h1 {
+  color: white;
+  font-size: 4rem;
+  font-family: 'Koulen';
+  letter-spacing: 0.2rem;
+}
 
 .content {
   opacity: 0;
