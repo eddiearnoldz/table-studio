@@ -1,12 +1,14 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import gsap from 'gsap'
+import TablesLogo from '/assets/logos/tables_logo.svg'
 
 const images = ref([
-  '/assets/images/chef.webp',
-  '/assets/images/event_space.webp',
-  '/assets/images/food.webp',
-  '/assets/images/ikebana.webp'
+  '/assets/images/tables_background_one.webp',
+  '/assets/images/tables_background_two.webp',
+  '/assets/images/tables_background_three.webp',
+  '/assets/images/tables_background_four.webp',
+  '/assets/images/tables_background_five.webp',
 ]);
 
 const duplicatedImages = ref([...images.value, ...images.value]);
@@ -29,13 +31,29 @@ const splitTitle = (title) => {
 };
 
 const toggleAbout = () => {
-  showAbout.value = !showAbout.value;
-  if (showAbout.value) showContact.value = false;
+  if (showAbout.value) {
+    showAbout.value = false;
+    setTimeout(() => {
+    }, 300);
+  } else {
+    setTimeout(() => {
+      showAbout.value = true;
+      showContact.value = false;
+    }, 300);
+  }
 };
 
 const toggleContact = () => {
-  showContact.value = !showContact.value;
-  if (showContact.value) showAbout.value = false;
+  if (showContact.value) {
+    showContact.value = false;
+    setTimeout(() => {
+    }, 300);
+  } else {
+    setTimeout(() => {
+      showContact.value = true;
+      showAbout.value = false;
+    }, 300);
+  }
 };
 
 const handleClickOutside = (event) => {
@@ -113,20 +131,27 @@ onBeforeUnmount(() => {
 });
 </script>
 
+
 <template>
   <div v-if="!imagesLoaded" class="loading-screen">
     <h1 v-html="splitTitle('Tables.')"></h1>
   </div>
   <div v-show="showContent" class="content">
     <header>
-      <h2 class="logo">Tables.</h2>
+      <transition name="fade">
+        <img v-show="showAbout || showContact" :src="TablesLogo" alt="Tables Logo" class="header-logo"/>
+      </transition>
       <ul class="nav">
         <li @click="toggleAbout">About</li>
         <li @click="toggleContact">Contact</li>
       </ul>
     </header>
 
-    <transition name="fade">
+    <main>
+      <transition name="fade">
+        <img v-show="!(showAbout || showContact)" :src="TablesLogo" alt="Tables Logo" class="logo"/>
+      </transition>
+      <transition name="fade">
       <div v-if="showAbout" class="displayInfo about-section">
         <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
       </div>
@@ -134,13 +159,10 @@ onBeforeUnmount(() => {
 
     <transition name="fade">
       <div v-if="showContact" class="displayInfo contact-section">
-        <a href="mailto:info@tables.studio">info@tables.studio</a>
+        <a href="mailto:info@tables.studio">info@tables.london</a>
         <a href="https://instagram.com" target="_blank">@tables-london</a>
       </div>
     </transition>
-
-    <main>
-      <h1 v-html="splitTitle('Tables.')"></h1>
       <div id="container">
         <div class="scroll">
           <div class="m-scroll">
@@ -154,6 +176,7 @@ onBeforeUnmount(() => {
     <div v-if="showCursor" class="cursor" :style="{ left: `${cursorX}px`, top: `${cursorY}px` }"></div>
   </div>
 </template>
+
 
 <style scoped>
 .loading-screen {
@@ -184,24 +207,25 @@ header {
   color: var(--text-color);
   padding: 1rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   width: calc(100% - 2rem);
+}
+
+.header-logo {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  width: 15vw;
+  max-width: 80px;
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }
 
 .nav {
   list-style: none;
   display: flex;
   gap: 1rem;
-}
-
-.logo {
-  transition: transform 0.3s;
-  font-family: 'Koulen';
-  letter-spacing: 0.1rem;
-  line-height: 100%;
-  font-size: 3rem;
-  margin: 0;
 }
 
 .nav li {
@@ -213,17 +237,16 @@ header {
 }
 
 .nav li:hover,
-.logo:hover,
-.displayInfo a:hover  {
+.displayInfo a:hover {
   transform: scale(1.1);
   transition: transform 0.3s;
 }
 
 .displayInfo {
   position: absolute;
-  top: 10%;
-  left: 0;
-  right: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
@@ -236,12 +259,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.displayInfo.contact-section {
-  top: unset;
-  bottom: 15%
-
+  width: calc(100% - 4rem);
 }
 
 .displayInfo a {
@@ -256,6 +274,7 @@ header {
 main {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 #container {
@@ -289,6 +308,17 @@ main {
   width: fit-content;
 }
 
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40vw;
+  max-width: 250px;
+  z-index: 2;
+  mix-blend-mode: difference;
+}
+
 .cursor {
   display: none;
   pointer-events: none;
@@ -315,31 +345,8 @@ main {
   object-fit: cover;
 }
 
-main h1 {
-  position: absolute;
-  top: calc(50% - 8vw);
-  color: var(--text-color);
-  opacity: 1;
-  mix-blend-mode: difference;
-  font-size: clamp(2rem, 25vw, 21rem);
-  line-height: 1;
-  margin: 0;
-  z-index: 3;
-  font-family: 'Koulen';
-  letter-spacing: 0.5vw;
-}
 
-.logo,
-main h1 {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.fade-enter-active{
+.fade-enter-active {
   transition: opacity 1s;
 }
 
@@ -384,6 +391,10 @@ main h1 {
     pointer-events: none;
     transition: transform 0.1s;
     z-index: 5;
+  }
+
+  .displayInfo {
+    font-size: 2.5rem;
   }
 }
 </style>
