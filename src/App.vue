@@ -239,12 +239,6 @@ header {
   letter-spacing: 0.1rem;
 }
 
-.nav li:hover,
-.displayInfo a:hover {
-  transform: scale(1.1);
-  transition: transform 0.3s;
-}
-
 .displayInfo {
   position: absolute;
   top: 50%;
@@ -289,8 +283,6 @@ main {
   z-index: 1;
 }
 
-
-
 .logo {
   position: absolute;
   top: 50%;
@@ -299,6 +291,7 @@ main {
   width: 40vw;
   max-width: 250px;
   z-index: 2;
+  pointer-events: none;
   /* mix-blend-mode: difference; */
 }
 
@@ -367,6 +360,16 @@ main {
   opacity: 0;
 }
 
+.nav li,
+p, img {
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none; 
+        -ms-user-select: none; 
+            user-select: none;
+}
+
 @media (min-width: 768px) {
   header {
     width: calc(100% - 4rem);
@@ -399,6 +402,12 @@ main {
 
   .displayInfo {
     font-size: 2.5rem;
+  }
+
+  .nav li:hover,
+  .displayInfo a:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s;
   }
 }
 </style>
