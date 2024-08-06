@@ -148,7 +148,7 @@ onBeforeUnmount(() => {
     </header>
 
     <main>
-      <video autoplay loop muted class="video-background" @canplaythrough="videoLoaded = true">
+      <video autoplay loop muted playsinline class="video-background" @canplaythrough="videoLoaded = true">
         <source src="/assets/tables_video_background.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
