@@ -3,19 +3,20 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import gsap from 'gsap'
 import TablesLogo from '/assets/logos/tables_logo.svg'
 
-const images = ref([
-  '/assets/images/tables_background_one.webp',
-  '/assets/images/tables_background_two.webp',
-  '/assets/images/tables_background_three.webp',
-  '/assets/images/tables_background_four.webp',
-  '/assets/images/tables_background_five.webp',
-]);
+// Comment out image references and functions
+// const images = ref([
+//   '/assets/images/tables_background_one.webp',
+//   '/assets/images/tables_background_two.webp',
+//   '/assets/images/tables_background_three.webp',
+//   '/assets/images/tables_background_four.webp',
+//   '/assets/images/tables_background_five.webp',
+// ]);
 
-const duplicatedImages = ref([...images.value, ...images.value]);
+// const duplicatedImages = ref([...images.value, ...images.value]);
 
 const showAbout = ref(false);
 const showContact = ref(false);
-const imagesLoaded = ref(false);
+const videoLoaded = ref(false);
 const cursorX = ref(0);
 const cursorY = ref(0);
 const showCursor = ref(window.innerWidth > 768);
@@ -82,21 +83,31 @@ const fadeInContent = () => {
   gsap.to('.content', { opacity: 1, duration: 1 });
 };
 
-const preloadImages = (imageArray) => {
-  let loadedCount = 0;
-  const totalImages = imageArray.length;
+// Comment out image preloading function
+// const preloadImages = (imageArray) => {
+//   let loadedCount = 0;
+//   const totalImages = imageArray.length;
 
-  imageArray.forEach((src) => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      loadedCount++;
-      if (loadedCount === totalImages) {
-        imagesLoaded.value = true;
-        fadeInContent();
-      }
-    };
-  });
+//   imageArray.forEach((src) => {
+//     const img = new Image();
+//     img.src = src;
+//     img.onload = () => {
+//       loadedCount++;
+//       if (loadedCount === totalImages) {
+//         imagesLoaded.value = true;
+//         fadeInContent();
+//       }
+//     };
+//   });
+// };
+
+const preloadVideo = (videoSrc) => {
+  const video = document.createElement('video');
+  video.src = videoSrc;
+  video.oncanplaythrough = () => {
+    videoLoaded.value = true;
+    fadeInContent();
+  };
 };
 
 onMounted(() => {
@@ -106,7 +117,8 @@ onMounted(() => {
 
   nextTick(() => {
     animateTitle();
-    preloadImages(duplicatedImages.value);
+    preloadVideo('/assets/tables_video_background.mp4'); // Preload the video
+    // preloadImages(duplicatedImages.value); // Comment out image preloading
   });
 });
 
@@ -118,11 +130,12 @@ onBeforeUnmount(() => {
 </script>
 
 
+
 <template>
-  <div v-if="!imagesLoaded" class="loading-screen">
+  <div v-if="!videoLoaded" class="loading-screen">
     <h1 v-html="splitTitle('Tables.')"></h1>
   </div>
-  <div v-show="imagesLoaded" class="content">
+  <div v-show="videoLoaded" class="content">
     <header>
       <transition name="fade">
         <img v-show="showAbout || showContact" :src="TablesLogo" alt="Tables Logo" @click="hideSections" class="header-logo"/>
@@ -134,22 +147,27 @@ onBeforeUnmount(() => {
     </header>
 
     <main>
+      <video autoplay loop muted class="video-background">
+        <source src="/assets/tables_video_background.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <transition name="fade">
         <img v-show="!(showAbout || showContact)" :src="TablesLogo" alt="Tables Logo" class="logo"/>
       </transition>
       <transition name="fade">
-      <div v-if="showAbout" class="displayInfo about-section">
-        <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
-      </div>
-    </transition>
+        <div v-if="showAbout" class="displayInfo about-section">
+          <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
+        </div>
+      </transition>
 
-    <transition name="fade">
-      <div v-if="showContact" class="displayInfo contact-section">
-        <a href="mailto:info@tables.studio">info@tables.london</a>
-        <a href="https://instagram.com" target="_blank">@tables-london</a>
-      </div>
-    </transition>
-      <div id="container">
+      <transition name="fade">
+        <div v-if="showContact" class="displayInfo contact-section">
+          <a href="mailto:info@tables.studio">info@tables.london</a>
+          <a href="https://instagram.com" target="_blank">@tables-london</a>
+        </div>
+      </transition>
+      <!-- Commented out image carousel -->
+      <!-- <div id="container">
         <div class="scroll">
           <div class="m-scroll">
             <div v-for="(img, index) in duplicatedImages" :key="'img-' + index" class="carousel-item">
@@ -157,16 +175,15 @@ onBeforeUnmount(() => {
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </main>
     <div v-if="showCursor" class="cursor" :style="{ left: `${cursorX}px`, top: `${cursorY}px` }"></div>
   </div>
 </template>
 
-
 <style scoped>
 .loading-screen {
-  background-color: black;
+  background-color: var(--text-color);
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -189,7 +206,7 @@ onBeforeUnmount(() => {
 header {
   position: absolute;
   top: 0;
-  z-index: 1;
+  z-index: 2;
   color: var(--text-color);
   padding: 1rem;
   display: flex;
@@ -239,8 +256,7 @@ header {
   font-size: 2rem;
   z-index: 3;
   color: var(--text-color);
-  opacity: 1;
-  mix-blend-mode: difference;
+  /* mix-blend-mode: difference; */
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -262,6 +278,48 @@ main {
   justify-content: center;
   position: relative;
 }
+
+.video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40vw;
+  max-width: 250px;
+  z-index: 2;
+  /* mix-blend-mode: difference; */
+}
+
+.cursor {
+  display: none;
+  pointer-events: none;
+}
+
+/* Commented out carousel item styles */
+/* .carousel-item {
+  display: inline-block;
+  height: 100%;
+  width: 75vw; 
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+} 
 
 #container {
   width: 100%;
@@ -294,43 +352,7 @@ main {
   width: fit-content;
 }
 
-.logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40vw;
-  max-width: 250px;
-  z-index: 2;
-  mix-blend-mode: difference;
-}
-
-.cursor {
-  display: none;
-  pointer-events: none;
-}
-
-@keyframes scrollText {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.carousel-item {
-  display: inline-block;
-  height: 100%;
-  width: 75vw; /* Adjust to show four items */
-}
-
-.carousel-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
+*/
 
 .fade-enter-active {
   transition: opacity 1s;
@@ -349,10 +371,6 @@ main {
   header {
     width: calc(100% - 4rem);
     padding: 1rem 2rem;
-  }
-
-  .carousel-item {
-    width: 33vw;
   }
 
   .nav li {
@@ -384,3 +402,4 @@ main {
   }
 }
 </style>
+
