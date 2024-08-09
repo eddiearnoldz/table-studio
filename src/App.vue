@@ -121,8 +121,8 @@ header {
 }
 
 .header-logo {
-  width: 15vw;
-  max-width: 80px;
+  width: 7vw;
+  max-width: 40px;
   opacity: 1;
   transition: opacity 0.5s ease;
 }
@@ -148,7 +148,7 @@ header {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   z-index: 3;
   text-align: center;
   display: flex;
@@ -233,7 +233,6 @@ p, img {
 
   header {
     width: calc(100% - 4rem);
-    padding: 1rem 2rem;
   }
 
   .nav li {
@@ -253,7 +252,6 @@ p, img {
   }
 
   .displayInfo {
-    font-size: 1.75rem;
     /* align-self: flex-end; */
     /* margin-bottom: 100px; */
     width: 30vw;
