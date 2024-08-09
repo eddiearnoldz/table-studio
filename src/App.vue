@@ -2,73 +2,15 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import gsap from 'gsap'
 import TablesLogo from '/assets/logos/tables_logo.svg'
+import TablesLogoSingle from '/assets/logos/tables_logo_T.svg'
 
-// Comment out image references and functions
-// const images = ref([
-//   '/assets/images/tables_background_one.webp',
-//   '/assets/images/tables_background_two.webp',
-//   '/assets/images/tables_background_three.webp',
-//   '/assets/images/tables_background_four.webp',
-//   '/assets/images/tables_background_five.webp',
-// ]);
-
-// const duplicatedImages = ref([...images.value, ...images.value]);
-
-const showAbout = ref(false);
-const showContact = ref(false);
 const videoLoaded = ref(false);
-const cursorX = ref(0);
-const cursorY = ref(0);
-const showCursor = ref(window.innerWidth > 768);
 
-const hideSections = () => {
-  showAbout.value = false;
-  showContact.value = false;
-};
 
 const splitTitle = (title) => {
   return title.split('').map((letter) => `<span class="name-animation">${letter}</span>`).join('');
 };
 
-const toggleAbout = () => {
-  if (!showAbout.value) {
-    showAbout.value = true;
-    showContact.value = false;
-  }
-};
-
-const toggleContact = () => {
-  if (!showContact.value) {
-    showContact.value = true;
-    showAbout.value = false;
-  }
-};
-
-const handleClickOutside = (event) => {
-  const aboutSection = document.querySelector('.about-section');
-  const contactSection = document.querySelector('.contact-section');
-  if (
-    !aboutSection?.contains(event.target) &&
-    !contactSection?.contains(event.target) &&
-    !event.target.closest('header')
-  ) {
-    hideSections();
-  }
-};
-
-const handleMouseMove = (event) => {
-  cursorX.value = event.clientX;
-  cursorY.value = event.clientY;
-};
-
-const handleResize = () => {
-  showCursor.value = window.innerWidth > 768;
-  if (showCursor.value) {
-    document.addEventListener('mousemove', handleMouseMove);
-  } else {
-    document.removeEventListener('mousemove', handleMouseMove);
-  }
-};
 
 const animateTitle = () => {
   const letters = document.querySelectorAll('.name-animation');
@@ -83,23 +25,6 @@ const fadeInContent = () => {
   gsap.to('.content', { opacity: 1, duration: 1 });
 };
 
-// Comment out image preloading function
-// const preloadImages = (imageArray) => {
-//   let loadedCount = 0;
-//   const totalImages = imageArray.length;
-
-//   imageArray.forEach((src) => {
-//     const img = new Image();
-//     img.src = src;
-//     img.onload = () => {
-//       loadedCount++;
-//       if (loadedCount === totalImages) {
-//         imagesLoaded.value = true;
-//         fadeInContent();
-//       }
-//     };
-//   });
-// };
 
 const preloadVideo = (videoSrc) => {
   const video = document.createElement('video');
@@ -112,22 +37,12 @@ const preloadVideo = (videoSrc) => {
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-  window.addEventListener('resize', handleResize);
-  handleResize(); // Check initial width
-
   nextTick(() => {
     animateTitle();
-    preloadVideo('/assets/tables_video_background.mp4'); // Preload the video
-    // preloadImages(duplicatedImages.value); // Comment out image preloading
+    preloadVideo('/assets/tables_video_background(1).webm'); // Preload the video
   });
 });
 
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-  window.removeEventListener('resize', handleResize);
-  document.removeEventListener('mousemove', handleMouseMove);
-});
 </script>
 
 
@@ -139,46 +54,35 @@ onBeforeUnmount(() => {
   <div v-show="videoLoaded" class="content">
     <header>
       <transition name="fade">
-        <img v-show="showAbout || showContact" :src="TablesLogo" alt="Tables Logo" @click="hideSections" class="header-logo"/>
+        <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
       </transition>
-      <ul class="nav">
+      <!-- <ul class="nav">
         <li @click="toggleAbout">About</li>
         <li @click="toggleContact">Contact</li>
-      </ul>
+      </ul> -->
     </header>
 
     <main>
       <video autoplay loop muted playsinline class="video-background" @canplaythrough="videoLoaded = true">
-        <source src="/assets/tables_video_background.mp4" type="video/mp4" />
+        <source src="/assets/tables_video_background(1).webm" type="video/webm" />
         Your browser does not support the video tag.
       </video>
       <transition name="fade">
-        <img v-show="!(showAbout || showContact)" :src="TablesLogo" alt="Tables Logo" class="logo"/>
+        <img :src="TablesLogo" alt="Tables Logo" class="logo"/>
       </transition>
       <transition name="fade">
-        <div v-if="showAbout" class="displayInfo about-section">
-          <p>Tables is a bespoke, conceptual events production company in London, bringing your wildest dreams to life. </p>
+        <div class="displayInfo about-section">
+          <p class="cormorant-garamond-regular">Welcome to Tables.</p>
+          <p class="cormorant-garamond-regular">We’re a dynamic event design and culinary studio reimagining the art of dining experiences. We craft each gathering with thoughtful concepts that transform dinners into distinctive, memorable events.  By uniting luxury hospitality with creative collaborations and impactful design, we produce gastronomic moments that celebrate originality and spark authentic connection. </p>
         </div>
       </transition>
-
       <transition name="fade">
-        <div v-if="showContact" class="displayInfo contact-section">
-          <a href="mailto:info@tables.studio">info@tables.london</a>
-          <a href="https://instagram.com" target="_blank">@tables-london</a>
+        <div class="displayInfo contact-section">
+          <a class="cormorant-garamond-regular" href="mailto:info@tables.studio">Contact: hello@tableslondon.com</a>
+          <a class="cormorant-garamond-regular" href="https://instagram.com" target="_blank">@tables-london</a>
         </div>
       </transition>
-      <!-- Commented out image carousel -->
-      <!-- <div id="container">
-        <div class="scroll">
-          <div class="m-scroll">
-            <div v-for="(img, index) in duplicatedImages" :key="'img-' + index" class="carousel-item">
-              <img :src="img" alt="carousel image" />
-            </div>
-          </div>
-        </div>
-      </div> -->
     </main>
-    <div v-if="showCursor" class="cursor" :style="{ left: `${cursorX}px`, top: `${cursorY}px` }"></div>
   </div>
 </template>
 
@@ -211,15 +115,12 @@ header {
   color: var(--text-color);
   padding: 1rem;
   display: flex;
-  justify-content: end;
+  justify-content: start;
   align-items: center;
   width: calc(100% - 2rem);
 }
 
 .header-logo {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
   width: 15vw;
   max-width: 80px;
   opacity: 1;
@@ -238,40 +139,45 @@ header {
   font-family: 'Koulen';
   font-size: 1.5rem;
   letter-spacing: 0.1rem;
+  opacity: 0.9;
+  color: white;
+  text-decoration: none;
 }
 
 .displayInfo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   z-index: 3;
-  color: var(--text-color);
-  /* mix-blend-mode: difference; */
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: calc(100% - 4rem);
+  color: white;
+  opacity: 0.8;
+}
+
+.displayInfo:first-of-type {
+  margin-top: 5vh
 }
 
 .displayInfo a {
   text-decoration: none;
-  color: var(--text-color);
-  opacity: 1;
-  mix-blend-mode: exclusion;
-  cursor: none;
+  cursor: pointer;
   transition: transform 0.3s;
+  color: white;
 }
 
 main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   position: relative;
+  padding-top: 25vh;
+  padding-bottom: 15vh;
 }
 
 .video-background {
@@ -285,68 +191,11 @@ main {
 }
 
 .logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 40vw;
   max-width: 250px;
   z-index: 2;
   pointer-events: none;
-  /* mix-blend-mode: difference; */
 }
-
-.cursor {
-  display: none;
-  pointer-events: none;
-}
-
-/* Commented out carousel item styles */
-/* .carousel-item {
-  display: inline-block;
-  height: 100%;
-  width: 75vw; 
-}
-
-.carousel-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(100%);
-} 
-
-#container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.scroll {
-  position: relative;
-  width: 100vw;
-  background-color: #000;
-  overflow: hidden;
-  z-index: 1;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
-.m-scroll {
-  overflow: hidden;
-  height: 100%;
-  white-space: nowrap;
-  animation: scrollText 50s infinite linear;
-  margin: 0;
-  font-size: 0;
-  display: flex;
-  justify-content: space-between;
-  width: fit-content;
-}
-
-*/
 
 .fade-enter-active {
   transition: opacity 1s;
@@ -371,38 +220,45 @@ p, img {
             user-select: none;
 }
 
-@media (min-width: 768px) {
+@media screen and (min-width: 768px) {
+  main {
+    height: 100vh;
+    min-height: 800px;
+    padding-top: unset;
+    padding-bottom: unset;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10vh;
+  }
+
   header {
     width: calc(100% - 4rem);
     padding: 1rem 2rem;
   }
 
   .nav li {
-    font-size: 2rem;
+    font-size: 1.5rem;
     letter-spacing: 0.2rem;
   }
 
   .logo {
-    font-size: 4rem;
-    letter-spacing: 0.2rem;
+    position: absolute;
+    left:50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
-  .cursor {
-    display: block;
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    background-color: white;
-    border-radius: 50%;
-    mix-blend-mode: exclusion;
-    opacity: 1;
-    pointer-events: none;
-    transition: transform 0.1s;
-    z-index: 5;
+  .displayInfo:first-of-type {
+    margin-top: unset;
   }
 
   .displayInfo {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
+    /* align-self: flex-end; */
+    /* margin-bottom: 100px; */
+    width: 30vw;
+    justify-content: center;
+    /* height: 30vh; */
   }
 
   .nav li:hover,
@@ -410,6 +266,7 @@ p, img {
     transform: scale(1.1);
     transition: transform 0.3s;
   }
+
 }
 </style>
 

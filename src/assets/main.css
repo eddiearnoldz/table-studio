@@ -6,8 +6,6 @@
 html,
 body {
   background-color: rgb(14, 13, 13);
-  cursor: none;
-
 }
 
 body,
@@ -18,32 +16,13 @@ p {
   font-family: 'Lora';
 }
 
-#app {
-  height: 100vh;
-  min-height: 800px;
-  width: 100vw;
-}
-
 main {
   height: 100%;
 }
 
 /* fonts */
-
-@font-face {
-  font-family: 'Koulen';
-  src: url('/assets/fonts/Koulen-Regular.ttf');
-  src: url('/assets/fonts/Koulen-Regular.woff');
-}
-
-@font-face {
-  font-family: 'Lora';
-  src: url('/assets/fonts/Lora-VariableFont_wght.ttf');
-  src: url('/assets/fonts/Lora-VariableFont_wght.woff');
-}
-
-@media screen and (min-width: 768px) {
-  html {
-    cursor: none;
-  }
+.cormorant-garamond-regular {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 400;
+  font-style: normal;
 }
