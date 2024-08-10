@@ -39,7 +39,7 @@ const preloadVideo = (videoSrc) => {
 onMounted(() => {
   nextTick(() => {
     animateTitle();
-    preloadVideo('/assets/tables_video_background(1).webm'); // Preload the video
+    preloadVideo('/assets/tables_video_background_desktop.webm'); // Preload the video
   });
 });
 
@@ -64,7 +64,7 @@ onMounted(() => {
 
     <main>
       <video autoplay loop muted playsinline class="video-background" @canplaythrough="videoLoaded = true">
-        <source src="/assets/tables_video_background(1).webm" type="video/webm" />
+        <source src="/assets/tables_video_background_desktop.webm" type="video/webm" />
         Your browser does not support the video tag.
       </video>
       <transition name="fade">
@@ -148,7 +148,7 @@ header {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   z-index: 3;
   text-align: center;
   display: flex;
@@ -157,6 +157,10 @@ header {
   width: calc(100% - 4rem);
   color: white;
   opacity: 0.8;
+}
+
+.displayInfo:first-of-type p:first-of-type {
+  font-weight: bold;
 }
 
 .displayInfo:first-of-type {
