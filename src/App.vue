@@ -78,8 +78,8 @@ onMounted(() => {
       </transition>
       <transition name="fade">
         <div class="displayInfo contact-section">
-          <a href="mailto:info@tables.studio">Contact: hello@tableslondon.com</a>
-          <a href="https://instagram.com" target="_blank">@tables.london</a>
+          <a href="mailto:hello@tableslondon.com">Contact: <span>hello@tableslondon.com</span></a>
+          <a class="insta" href="https://instagram.com/tables.london" target="_blank">@tables.london</a>
         </div>
       </transition>
     </main>
@@ -124,12 +124,12 @@ header p{
     font-size: 1.5rem;
     color: white;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 12px;
     opacity: 0.8;
 }
 
 .header-logo {
-  width: 7vw;
+  width: 35px;
   max-width: 40px;
   opacity: 1;
   transition: opacity 0.5s ease;
@@ -167,6 +167,12 @@ header p{
   opacity: 0.8;
 }
 
+.displayInfo p {
+    font-family: "Inter", sans-serif;
+    font-weight: 100;
+    font-size: 1.2rem;
+}
+
 .displayInfo:first-of-type {
   margin-bottom: 5vh
 }
@@ -180,6 +186,14 @@ header p{
   cursor: pointer;
   transition: transform 0.3s;
   color: white;
+  font-family: "Inter", sans-serif;
+  font-weight: 100;
+  font-size: 1.2rem;
+}
+
+a.insta,
+.displayInfo a span {
+  font-weight: bold;
 }
 
 main {
@@ -240,7 +254,7 @@ p, img {
     padding-top: unset;
     padding-bottom: unset;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: flex-start;
     gap: 10vh;
   }
@@ -250,7 +264,8 @@ p, img {
   }
 
   header p{
-    margin-top: 15px;
+    margin-top: 12px;
+    font-size: 2rem
   }
 
   .nav li {
@@ -269,14 +284,21 @@ p, img {
     width: 30vw;
     justify-content: center;
     margin-top: 5vh;
-    text-align: center;
-    
+    text-align: left;
+    margin: 10vh 0 5vh;
+    padding: 0 2rem;
   }
 
   .nav li:hover,
   .displayInfo a:hover {
-    transform: scale(1.1);
+    transform: translateY(5px);
     transition: transform 0.3s;
+  }
+
+  .displayInfo:last-of-type {
+    margin-top: unset;
+    text-align: right;
+    padding: 1rem 2rem;
   }
 
 }
