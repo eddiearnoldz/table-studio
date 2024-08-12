@@ -293,7 +293,7 @@ p, img {
   .displayInfo:last-of-type {
     margin-top: unset;
     text-align: right;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
   }
 
 }
