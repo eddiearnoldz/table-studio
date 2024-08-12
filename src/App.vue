@@ -298,6 +298,14 @@ p, img {
     padding: 0 2rem;
   }
 
+  .displayInfo.contact-section {
+    align-items: flex-end;
+  }
+
+  .displayInfo.contact-section a {
+    width: min-content;
+  }
+
   .nav li:hover,
   .displayInfo a:hover {
     transform: translateY(5px);
