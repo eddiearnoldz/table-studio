@@ -1,53 +1,24 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import gsap from 'gsap'
-import TablesLogo from '/assets/logos/tables_logo.svg'
-import TablesLogoSingle from '/assets/logos/tables_logo_T.svg'
+import TablesLogo from '/assets/logos/tables_logo.svg';
+import TablesLogoSingle from '/assets/logos/tables_logo_T.svg';
+import gsap from 'gsap';
 
-const videoLoaded = ref(false);
 const videoSrc = ref('');
 
-
-const splitTitle = (title) => {
-  return title.split('').map((letter) => `<span class="name-animation">${letter}</span>`).join('');
-};
-
-
-const animateTitle = () => {
-  const letters = document.querySelectorAll('.name-animation');
-  gsap.fromTo(
-    letters,
-    { opacity: 0},
-    {  opacity: 1, stagger: {each: 0.2, from:"start"}, duration: 1, delay: 1,}
-  );
+const updateVideoSource = () => {
+  const isMobile = window.innerWidth < 768;
+  videoSrc.value = isMobile ? '/assets/tables_mobile_background.mp4' : '/assets/tables_background_video.mp4';
 };
 
 const fadeInContent = () => {
   gsap.to('.content', { opacity: 1, duration: 1 });
 };
 
-const preloadVideo = (videoSrc) => {
-  const video = document.createElement('video');
-  video.src = videoSrc;
-  video.oncanplaythrough = () => {
-    videoLoaded.value = true;
-    fadeInContent();
-  };
-  video.load();
-};
-
-
-
-const updateVideoSource = () => {
-  const isMobile = window.innerWidth < 768;
-  videoSrc.value = isMobile ? '/assets/tables_mobile_background.mp4' : '/assets/tables_background_video.mp4';
-  preloadVideo(videoSrc.value);
-};
-
 onMounted(() => {
   nextTick(() => {
-    animateTitle();
     updateVideoSource();
+    fadeInContent();
   });
 
   window.addEventListener('resize', updateVideoSource);
@@ -62,17 +33,10 @@ onBeforeUnmount(() => {
 
 
 <template>
-  <div v-if="!videoLoaded" class="loading-screen">
-    <h1 v-html="splitTitle('Tables.')"></h1>
-  </div>
-  <div v-show="videoLoaded" class="content">
+  <div class="content">
     <transition name="fade">
-    <header>
-          <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
-        <!-- <ul class="nav">
-          <li @click="toggleAbout">About</li>
-          <li @click="toggleContact">Contact</li>
-        </ul> -->
+      <header>
+        <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
       </header>
     </transition>
 
@@ -83,7 +47,7 @@ onBeforeUnmount(() => {
       </video>
       <transition name="fade">
         <div class="displayInfo about-section">
-          <p >Welcome to Tables. We’re a dynamic event design and culinary studio reimagining the art of dining experiences. Blending luxury hospitality with creative collaborations.</p>
+          <p>Welcome to Tables. We’re a dynamic event design and culinary studio reimagining the art of dining experiences. Blending luxury hospitality with creative collaborations.</p>
         </div>
       </transition>
       <transition name="fade">
@@ -92,28 +56,15 @@ onBeforeUnmount(() => {
       <transition name="fade">
         <div class="displayInfo contact-section">
           <a href="mailto:hello@tableslondon.com">Contact: hello@tableslondon.com</a>
-          <a  href="https://instagram.com/tables.london" target="_blank">@tables.london</a>
+          <a href="https://instagram.com/tables.london" target="_blank">@tables.london</a>
         </div>
       </transition>
     </main>
   </div>
 </template>
 
-<style scoped>
-.loading-screen {
-  background-color: var(--text-color);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.loading-screen h1 {
-  color: white;
-  font-size: 4rem;
-  font-family: 'Koulen';
-  letter-spacing: 0.2rem;
-}
+<style scoped>
 
 .content {
   opacity: 0;
