@@ -259,7 +259,7 @@ p, img {
   }
 
   header p{
-    margin-top: 8px;
+    margin-top: 6px;
     font-size: 2rem
   }
 
