@@ -69,7 +69,6 @@ onBeforeUnmount(() => {
     <transition name="fade">
     <header>
           <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
-          <p >Welcome to Tables.</p>
         <!-- <ul class="nav">
           <li @click="toggleAbout">About</li>
           <li @click="toggleContact">Contact</li>
@@ -84,7 +83,7 @@ onBeforeUnmount(() => {
       </video>
       <transition name="fade">
         <div class="displayInfo about-section">
-          <p >We’re a dynamic event design and culinary studio reimagining the art of dining experiences. Blending luxury hospitality with creative collaborations.</p>
+          <p >Welcome to Tables. We’re a dynamic event design and culinary studio reimagining the art of dining experiences. Blending luxury hospitality with creative collaborations.</p>
         </div>
       </transition>
       <transition name="fade">
@@ -296,14 +295,11 @@ p, img {
     text-align: left;
     margin: 10vh 0 5vh;
     padding: 0 2rem;
+    max-width: 450px;
   }
 
   .displayInfo.contact-section {
     align-items: flex-end;
-  }
-
-  .displayInfo.contact-section a {
-    width: min-content;
   }
 
   .nav li:hover,
