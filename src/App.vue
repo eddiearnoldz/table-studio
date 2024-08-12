@@ -79,7 +79,7 @@ onMounted(() => {
       <transition name="fade">
         <div class="displayInfo contact-section">
           <a href="mailto:info@tables.studio">Contact: hello@tableslondon.com</a>
-          <a href="https://instagram.com" target="_blank">@tables-london</a>
+          <a href="https://instagram.com" target="_blank">@tables.london</a>
         </div>
       </transition>
     </main>
