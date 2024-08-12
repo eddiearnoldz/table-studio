@@ -78,8 +78,8 @@ onMounted(() => {
       </transition>
       <transition name="fade">
         <div class="displayInfo contact-section">
-          <a href="mailto:hello@tableslondon.com">Contact: <span>hello@tableslondon.com</span></a>
-          <a class="insta" href="https://instagram.com/tables.london" target="_blank">@tables.london</a>
+          <a href="mailto:hello@tableslondon.com">Contact: hello@tableslondon.com</a>
+          <a  href="https://instagram.com/tables.london" target="_blank">@tables.london</a>
         </div>
       </transition>
     </main>
@@ -191,11 +191,6 @@ header p{
   font-size: 1.2rem;
 }
 
-a.insta,
-.displayInfo a span {
-  font-weight: bold;
-}
-
 main {
   display: flex;
   flex-direction: column;
@@ -264,7 +259,7 @@ p, img {
   }
 
   header p{
-    margin-top: 12px;
+    margin-top: 8px;
     font-size: 2rem
   }
 
