@@ -5,6 +5,7 @@ import TablesLogo from '/assets/logos/tables_logo.svg'
 import TablesLogoSingle from '/assets/logos/tables_logo_T.svg'
 
 const videoLoaded = ref(false);
+const videoSrc = ref('');
 
 
 const splitTitle = (title) => {
@@ -25,7 +26,6 @@ const fadeInContent = () => {
   gsap.to('.content', { opacity: 1, duration: 1 });
 };
 
-
 const preloadVideo = (videoSrc) => {
   const video = document.createElement('video');
   video.src = videoSrc;
@@ -33,14 +33,28 @@ const preloadVideo = (videoSrc) => {
     videoLoaded.value = true;
     fadeInContent();
   };
-  video.load(); 
+  video.load();
+};
+
+
+
+const updateVideoSource = () => {
+  const isMobile = window.innerWidth < 768;
+  videoSrc.value = isMobile ? '/assets/tables_mobile_background.mp4' : '/assets/tables_background_video.mp4';
+  preloadVideo(videoSrc.value);
 };
 
 onMounted(() => {
   nextTick(() => {
     animateTitle();
-    preloadVideo('/assets/tables_background_video.mp4'); // Preload the video
+    updateVideoSource();
   });
+
+  window.addEventListener('resize', updateVideoSource);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateVideoSource);
 });
 
 </script>
@@ -64,8 +78,8 @@ onMounted(() => {
     </transition>
 
     <main>
-      <video autoplay loop muted playsinline class="video-background" @canplaythrough="videoLoaded = true">
-        <source src="/assets/tables_background_video.mp4" type="video/mp4" />
+      <video autoplay loop muted playsinline class="video-background">
+        <source :src="videoSrc" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <transition name="fade">
