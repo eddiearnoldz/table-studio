@@ -39,7 +39,7 @@ const preloadVideo = (videoSrc) => {
 onMounted(() => {
   nextTick(() => {
     animateTitle();
-    preloadVideo('/assets/tables_video_background_desktop.webm'); // Preload the video
+    preloadVideo('/assets/tables_background_video.mp4'); // Preload the video
   });
 });
 
@@ -65,7 +65,7 @@ onMounted(() => {
 
     <main>
       <video autoplay loop muted playsinline class="video-background" @canplaythrough="videoLoaded = true">
-        <source src="/assets/tables_video_background_desktop.webm" type="video/webm" />
+        <source src="/assets/tables_background_video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <transition name="fade">
