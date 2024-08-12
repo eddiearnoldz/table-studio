@@ -52,15 +52,16 @@ onMounted(() => {
     <h1 v-html="splitTitle('Tables.')"></h1>
   </div>
   <div v-show="videoLoaded" class="content">
+    <transition name="fade">
     <header>
-      <transition name="fade">
-        <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
-      </transition>
-      <!-- <ul class="nav">
-        <li @click="toggleAbout">About</li>
-        <li @click="toggleContact">Contact</li>
-      </ul> -->
-    </header>
+          <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
+          <p >Welcome to Tables.</p>
+        <!-- <ul class="nav">
+          <li @click="toggleAbout">About</li>
+          <li @click="toggleContact">Contact</li>
+        </ul> -->
+      </header>
+    </transition>
 
     <main>
       <video autoplay loop muted playsinline class="video-background" @canplaythrough="videoLoaded = true">
@@ -68,18 +69,17 @@ onMounted(() => {
         Your browser does not support the video tag.
       </video>
       <transition name="fade">
-        <img :src="TablesLogo" alt="Tables Logo" class="logo"/>
-      </transition>
-      <transition name="fade">
         <div class="displayInfo about-section">
-          <p class="cormorant-garamond-regular">Welcome to Tables.</p>
-          <p class="cormorant-garamond-regular">We’re a dynamic event design and culinary studio reimagining the art of dining experiences. We craft each gathering with thoughtful concepts that transform dinners into distinctive, memorable events.  By uniting luxury hospitality with creative collaborations and impactful design, we produce gastronomic moments that celebrate originality and spark authentic connection. </p>
+          <p >We’re a dynamic event design and culinary studio reimagining the art of dining experiences. Blending luxury hospitality with creative collaborations.</p>
         </div>
       </transition>
       <transition name="fade">
+        <img :src="TablesLogo" alt="Tables Logo" class="logo"/>
+      </transition>
+      <transition name="fade">
         <div class="displayInfo contact-section">
-          <a class="cormorant-garamond-regular" href="mailto:info@tables.studio">Contact: hello@tableslondon.com</a>
-          <a class="cormorant-garamond-regular" href="https://instagram.com" target="_blank">@tables-london</a>
+          <a href="mailto:info@tables.studio">Contact: hello@tableslondon.com</a>
+          <a href="https://instagram.com" target="_blank">@tables-london</a>
         </div>
       </transition>
     </main>
@@ -120,6 +120,14 @@ header {
   width: calc(100% - 2rem);
 }
 
+header p{
+    font-size: 1.5rem;
+    color: white;
+    margin-left: 10px;
+    margin-top: 10px;
+    opacity: 0.8;
+}
+
 .header-logo {
   width: 7vw;
   max-width: 40px;
@@ -148,7 +156,7 @@ header {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   z-index: 3;
   text-align: center;
   display: flex;
@@ -159,11 +167,11 @@ header {
   opacity: 0.8;
 }
 
-.displayInfo:first-of-type p:first-of-type {
-  font-weight: bold;
+.displayInfo:first-of-type {
+  margin-bottom: 5vh
 }
 
-.displayInfo:first-of-type {
+.displayInfo:last-of-type {
   margin-top: 5vh
 }
 
@@ -180,8 +188,9 @@ main {
   justify-content: center;
   align-items: center;
   position: relative;
-  padding-top: 25vh;
-  padding-bottom: 15vh;
+  padding-top: 10vh;
+  padding-bottom: 10vh;
+  font-family: "Cormorant Garamond", serif;
 }
 
 .video-background {
@@ -232,11 +241,16 @@ p, img {
     padding-bottom: unset;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: flex-start;
     gap: 10vh;
   }
 
   header {
     width: calc(100% - 4rem);
+  }
+
+  header p{
+    margin-top: 15px;
   }
 
   .nav li {
@@ -251,16 +265,12 @@ p, img {
     transform: translate(-50%, -50%);
   }
 
-  .displayInfo:first-of-type {
-    margin-top: unset;
-  }
-
   .displayInfo {
-    /* align-self: flex-end; */
-    /* margin-bottom: 100px; */
     width: 30vw;
     justify-content: center;
-    /* height: 30vh; */
+    margin-top: 5vh;
+    text-align: center;
+    
   }
 
   .nav li:hover,
