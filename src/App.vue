@@ -5,11 +5,22 @@ import TablesLogoSingle from '/assets/logos/tables_logo_T.svg';
 import gsap from 'gsap';
 
 const videoSrc = ref('');
+const videoElement = ref(null);
 
 const updateVideoSource = () => {
   const isMobile = window.innerWidth < 768;
   videoSrc.value = isMobile ? '/assets/tables_mobile_background.mp4' : '/assets/tables_background_video.mp4';
+
+  // Ensure the video plays automatically
+  if (videoElement.value) {
+    videoElement.value.load();  // Load the video to reset the source
+    videoElement.value.play().catch((err) => {
+      console.error('Autoplay was prevented:', err);
+      // Optionally, you can handle the error (e.g., show a play button)
+    });
+  }
 };
+
 
 const fadeInContent = () => {
   gsap.to('.content', { opacity: 1, duration: 1 });
@@ -41,7 +52,7 @@ onBeforeUnmount(() => {
     </transition>
 
     <main>
-      <video autoplay loop muted playsinline class="video-background">
+      <video ref="videoElement" autoplay loop muted playsinline class="video-background">
         <source :src="videoSrc" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
