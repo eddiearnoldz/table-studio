@@ -1,109 +1,50 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import TablesLogo from '/assets/logos/tables_logo.svg';
-import TablesLogoSingle from '/assets/logos/tables_logo_T.svg';
-import gsap from 'gsap';
+import { useRoute } from 'vue-router'
+import TablesLogoSingle from '/assets/logos/tables_logo_T.svg'
 
-const videoSrc = ref('');
-const videoElement = ref(null);
-
-const updateVideoSource = () => {
-  const isMobile = window.innerWidth < 768;
-  const newSrc = isMobile ? '/assets/tables_mobile_background.mp4' : '/assets/tables_background_video.mp4';
-
-  // Only update the video source if it's different
-  if (videoSrc.value !== newSrc) {
-    videoSrc.value = newSrc;
-    // Ensure the video plays automatically
-    if (videoElement.value) {
-      videoElement.value.load();  // Load the video to reset the source
-      videoElement.value.play().catch((err) => {
-        console.error('Autoplay was prevented:', err);
-        // Optionally, show a play button or another fallback UI
-      });
-    }
-  }
-};
-
-const fadeInContent = () => {
-  gsap.to('.content', { opacity: 1, duration: 1 });
-};
-
-onMounted(() => {
-  nextTick(() => {
-    updateVideoSource();
-    fadeInContent();
-  });
-
-  window.addEventListener('resize', updateVideoSource);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateVideoSource);
-});
-
+const route = useRoute()
 </script>
 
-
-
 <template>
-  <div class="content">
-    <transition name="fade">
-      <header>
+  <div class="app-shell">
+    <header>
+      <router-link to="/" class="logo-link">
         <img :src="TablesLogoSingle" alt="Tables Logo" class="header-logo"/>
-      </header>
-    </transition>
+      </router-link>
+      <nav class="main-nav">
+        <router-link to="/events" :class="{ active: route.name === 'events' }">Events</router-link>
+      </nav>
+    </header>
 
-    <main>
-      <video ref="videoElement" autoplay loop muted playsinline preload="auto" class="video-background">
-        <source :src="videoSrc" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <transition name="fade">
-        <div class="displayInfo about-section">
-          <p>Welcome to Tables. We’re a dynamic event design and culinary studio reimagining the art of dining experiences. Blending luxury hospitality with creative collaborations.</p>
-        </div>
+    <router-view v-slot="{ Component }">
+      <transition name="page-fade" mode="out-in">
+        <component :is="Component" />
       </transition>
-      <transition name="fade">
-        <img :src="TablesLogo" alt="Tables Logo" class="logo"/>
-      </transition>
-      <transition name="fade">
-        <div class="displayInfo contact-section">
-          <a href="mailto:hello@tableslondon.com">Contact: hello@tableslondon.com</a>
-          <a href="https://instagram.com/tables.london" target="_blank">@tables.london</a>
-        </div>
-      </transition>
-    </main>
+    </router-view>
   </div>
 </template>
 
-
 <style scoped>
-
-.content {
-  opacity: 0;
-  transition: opacity 1s ease;
-  height: 100%;
+.app-shell {
+  min-height: 100vh;
 }
 
 header {
-  position: absolute;
+  position: fixed;
   top: 0;
-  z-index: 2;
-  color: var(--text-color);
-  padding: 1rem;
+  left: 0;
+  right: 0;
+  z-index: 100;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
-  width: calc(100% - 2rem);
+  padding: 1rem 1.5rem;
+  background: linear-gradient(to bottom, rgba(14, 13, 13, 0.95), transparent);
 }
 
-header p{
-    font-size: 1.5rem;
-    color: white;
-    margin-left: 10px;
-    margin-top: 12px;
-    opacity: 0.8;
+.logo-link {
+  display: flex;
+  align-items: center;
 }
 
 .header-logo {
@@ -113,172 +54,62 @@ header p{
   transition: opacity 0.5s ease;
 }
 
-.nav {
-  list-style: none;
+.header-logo:hover {
+  opacity: 0.7;
+}
+
+.main-nav {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.nav li {
-  text-decoration: none;
-  transition: transform 0.3s;
-  font-family: 'Koulen';
-  font-size: 1.5rem;
-  letter-spacing: 0.1rem;
-  opacity: 0.9;
+.main-nav a {
   color: white;
   text-decoration: none;
-}
-
-.displayInfo {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-  font-size: 1.5rem;
-  z-index: 3;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: calc(100% - 4rem);
-  color: white;
-  opacity: 0.8;
-}
-
-.displayInfo p {
-    font-family: "Inter", sans-serif;
-    font-weight: 100;
-    font-size: 1.2rem;
-}
-
-.displayInfo:first-of-type {
-  margin-bottom: 5vh
-}
-
-.displayInfo:last-of-type {
-  margin-top: 5vh
-}
-
-.displayInfo a {
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.3s;
-  color: white;
   font-family: "Inter", sans-serif;
-  font-weight: 100;
-  font-size: 1.2rem;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  font-weight: 300;
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: opacity 0.3s;
   position: relative;
-  padding-top: 10vh;
-  padding-bottom: 10vh;
-  font-family: "Cormorant Garamond", serif;
 }
 
-.video-background {
+.main-nav a:hover,
+.main-nav a.active {
+  opacity: 1;
+}
+
+.main-nav a.active::after {
+  content: '';
   position: absolute;
-  top: 0;
+  bottom: -4px;
   left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
+  right: 0;
+  height: 1px;
+  background: white;
 }
 
-.logo {
-  width: 40vw;
-  max-width: 250px;
-  z-index: 2;
-  pointer-events: none;
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.4s ease;
 }
 
-.fade-enter-active {
-  transition: opacity 1s;
-}
-
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
+.page-fade-enter-from,
+.page-fade-leave-to {
   opacity: 0;
 }
 
-.nav li,
-p, img {
-  -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none; 
-        -ms-user-select: none; 
-            user-select: none;
-}
-
 @media screen and (min-width: 768px) {
-  main {
-    height: 100vh;
-    min-height: 800px;
-    padding-top: unset;
-    padding-bottom: unset;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10vh;
-  }
-
   header {
-    width: calc(100% - 4rem);
+    padding: 1rem 2rem;
   }
 
-  header p{
-    margin-top: 6px;
-    font-size: 2rem
+  .main-nav {
+    gap: 3rem;
   }
 
-  .nav li {
-    font-size: 1.5rem;
-    letter-spacing: 0.2rem;
+  .main-nav a {
+    font-size: 1.1rem;
   }
-
-  .logo {
-    position: absolute;
-    left:50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .displayInfo {
-    width: 30vw;
-    justify-content: center;
-    margin-top: 5vh;
-    text-align: left;
-    margin: 10vh 0 5vh;
-    padding: 0 2rem;
-    max-width: 450px;
-  }
-
-  .displayInfo.contact-section {
-    align-items: flex-end;
-  }
-
-  .nav li:hover,
-  .displayInfo a:hover {
-    transform: translateY(5px);
-    transition: transform 0.3s;
-  }
-
-  .displayInfo:last-of-type {
-    margin-top: unset;
-    text-align: right;
-    padding: 1rem 1.5rem;
-  }
-
 }
 </style>
-
