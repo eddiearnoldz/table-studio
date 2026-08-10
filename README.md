@@ -14,7 +14,7 @@ npm run dev
 Create a `.env` file in the root:
 
 ```
-VITE_SANITY_PROJECT_ID=kj4hf160
+VITE_SANITY_PROJECT_ID=cln5vehq
 VITE_SANITY_DATASET=production
 ```
 
